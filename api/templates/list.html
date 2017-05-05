@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分享列表</title>
+</head>
+<body>
+<h2>可分享的文章列表</h2>
+<ol>
+    {% for url in urls %}
+        <li><a href="share/{{ url.id }}">{{ url.title }}</a></li>
+    {% endfor %}
+</ol>
+</body>
+</html>
