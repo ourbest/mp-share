@@ -3,3 +3,4 @@ pymysql
 requests
 redis
 pytz
+gunicorn
