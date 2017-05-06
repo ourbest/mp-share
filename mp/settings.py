@@ -129,7 +129,7 @@ BOOTSTRAP3 = {
     'jquery_url': '//cdn.bootcss.com/jquery/3.2.1/jquery.min.js',
 
     # The Bootstrap base URL
-    'base_url': '//cdn.bootcss.com/bootstrap/3.3.7',
+    'base_url': '//cdn.bootcss.com/bootstrap/3.3.7/',
 
     # The complete URL to the Bootstrap CSS file (None means derive it from base_url)
     'css_url': None,
