@@ -6,22 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% bootstrap_css %}
     {% bootstrap_javascript jquery=1 %}
-    <title>分享文章</title>
+    <title>{{ url.wx_url.title }}</title>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .img {
+            max-height: 120px;
+        }
+    </style>
 </head>
 <body>
-<h3>分享 {{ url.wx_url.title }}</h3>
+<div class="container">
+    <h3>分享 {{ url.wx_url.title }}</h3>
+    <p>{{ url.wx_url.memo }}</p>
+    <img src="{% endautoescape %}{{ url.wx_url.image }}{% autoescape off %}" class="img"/>
 
-<p>分享此页即可</p>
+    <h5>分享此页即可</h5>
 
-<h5>分享了</h5>
-<ul>
-    <li>好友、群：{{ url.friend_shares }}次</li>
-    <li>朋友圈：{{ url.timeline_shares }}次</li>
-    <li>点击数：{{ url.clicks }}</li>
-</ul>
+    <hr/>
+    <h5>分享了</h5>
+    <div>
+        <p>好友、群：{{ url.friend_shares }}次</p>
+        <p>朋友圈：{{ url.timeline_shares }}次</p>
+        <p>点击数：{{ url.clicks }}</p>
+    </div>
+</div>
 </body>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
+    {% autoescape off %}
     if (window.wx) {
         wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -70,5 +85,6 @@
             });
         });
     }
+    {% endautoescape %}
 </script>
 </html>

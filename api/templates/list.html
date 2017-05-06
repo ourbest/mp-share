@@ -5,18 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="UTF-8">
     {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    {% bootstrap_javascript jquery=1 %}
+    <style>
+        .img {
+            width: 80px;
+            float: left;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        li {
+            list-style: none;
+            height: 100px;
+            display: block;
+        }
+
+        li .article {
+            padding: 5px;
+        }
+
+        .memo {
+            font-size: 12px;
+            color: #b2b2b2;
+        }
+    </style>
     <title>分享列表</title>
 </head>
 <body>
-<h2>可分享的文章列表</h2>
-<ol>
-    {% for url in urls %}
-        <li><a href="share/{{ url.id }}">{{ url.title }}</a></li>
-    {% endfor %}
-</ol>
-<hr/>
+<div class="container">
+    <ol>
+        {% for url in urls %}
+        <li onclick="open('share/{{ url.id }}'); return false;">
+            <img src="{% autoescape off %}{{ url.image }}{% endautoescape %}" class="img">
+            <div class="article">
+                <div><a href="share/{{ url.id }}">{{ url.title }}</a></div>
+                <div class="memo">{{ url.memo }}</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ol>
+    <hr/>
 
-<p><a href="/admin">管理</a> <a href="/logout">退出</a></p>
+    <p><a href="/admin">管理</a> <a href="/logout">退出</a></p></div>
 </body>
 </html>

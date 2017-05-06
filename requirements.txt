@@ -5,3 +5,4 @@ redis
 pytz
 gunicorn
 django-bootstrap3
+django-flat-responsive
