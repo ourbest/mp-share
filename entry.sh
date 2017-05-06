@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-mkdir -p /tmp/logs
+mkdir -p logs
 
-gunicorn -w 2 -b 0.0.0.0:8000 --access-logfile /tmp/logs/access.log mp.wsgi:application
+python manage.py migrate
+
+gunicorn -w 2 -b 0.0.0.0:8000 --access-logfile logs/access.log mp.wsgi:application

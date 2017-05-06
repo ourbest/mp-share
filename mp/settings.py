@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '=6jpm^^ci^p24_#!93$t4t%7c8bg(q6!eo^@l0!(87q8g)&$cx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -115,8 +115,8 @@ COOKIE_NAME = 'mpapp'
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-WX_APP_KEY = ''
-WX_APP_SECRET = ''
+WX_APP_KEY = os.getenv('WX_APP_KEY', '')
+WX_APP_SECRET = os.getenv('WX_APP_SECRET', '')
 
 try:
     from .local_settings import *
