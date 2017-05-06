@@ -53,6 +53,6 @@
     </ol>
     <hr/>
 
-    <p><a href="/admin">管理</a> <a href="/logout">退出</a></p></div>
+    <p>{% if admin %}<a href="/admin">管理</a> {% endif %}<a href="/logout">退出</a></p></div>
 </body>
 </html>

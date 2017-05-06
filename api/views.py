@@ -116,7 +116,7 @@ def pages(request):
     #     } for x in db]
     # })
 
-    return render(request, 'list.html', {'urls': db})
+    return render(request, 'list.html', {'urls': db, 'admin': u.admin})
 
 
 @login_required
