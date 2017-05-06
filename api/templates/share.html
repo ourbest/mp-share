@@ -21,7 +21,7 @@
 <div class="container">
     <h3>分享 {{ url.wx_url.title }}</h3>
     <p>{{ url.wx_url.memo }}</p>
-    <img src="{% endautoescape %}{{ url.wx_url.image }}{% autoescape off %}" class="img"/>
+    <img src="{% autoescape off %}{{ url.wx_url.image }}{% endautoescape %}" class="img"/>
 
     <h5>分享此页即可</h5>
 

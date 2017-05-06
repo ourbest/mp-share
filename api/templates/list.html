@@ -16,6 +16,11 @@
             padding: 20px;
         }
 
+        ol {
+            padding: 0;
+            margin: 0;
+        }
+
         li {
             list-style: none;
             height: 100px;
@@ -23,7 +28,7 @@
         }
 
         li .article {
-            padding: 5px;
+            padding: 5px 5px 5px 90px;
         }
 
         .memo {
@@ -37,7 +42,7 @@
 <div class="container">
     <ol>
         {% for url in urls %}
-        <li onclick="open('share/{{ url.id }}'); return false;">
+        <li>
             <img src="{% autoescape off %}{{ url.image }}{% endautoescape %}" class="img">
             <div class="article">
                 <div><a href="share/{{ url.id }}">{{ url.title }}</a></div>
