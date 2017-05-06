@@ -41,7 +41,7 @@ class WxShareURL(models.Model):
     timeline_shares = models.IntegerField('朋友圈分享数', default=0)
 
     def __str__(self):
-        return '[%s]%s' % (self.wx_user.name, self.wx_url.url)
+        return '[%s]%s' % (self.wx_user.name, self.wx_url.title)
 
     class Meta:
         verbose_name = '文章分享'
