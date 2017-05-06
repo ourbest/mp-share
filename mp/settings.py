@@ -183,6 +183,9 @@ BOOTSTRAP3 = {
 }
 
 LOGIN_URL = '/login'
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 90 # One month
+
 try:
     from .local_settings import *
 except ImportError:

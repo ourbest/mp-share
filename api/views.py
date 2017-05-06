@@ -3,13 +3,13 @@ import hashlib
 import time
 import uuid
 
+import logging
 import requests
 from django.conf import settings
 from django.contrib import auth
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 from api import utils
 from api.models import WxShareURL, WxClick, WxURL, WxUser
@@ -17,6 +17,8 @@ from api.models import WxShareURL, WxClick, WxURL, WxUser
 from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm
+
+logger = logging.getLogger(__name__)
 
 
 def login(request):
@@ -164,8 +166,9 @@ def sign(url, ts, nonce):
 def get_token():
     key = settings.WX_APP_KEY
     secret = settings.WX_APP_SECRET
-    response = requests.get(
-        'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s' % (key, secret))
+    url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s' % (key, secret)
+    response = requests.get(url)
+    logger.info("get token %s response %s", url, response.text)
     return response.json().get('access_token')
 
 
@@ -184,7 +187,10 @@ def get_ticket():
     global tickets
     if not tickets or tickets['expire'] < time.time():
         token = get_token()
-        response = requests.get('https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi' % token)
+        url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi' % token
+        response = requests.get(url)
+        text = response.text
+        logger.info("get ticket response %s", text)
         ticket = response.json().get('ticket')
         tickets = {
             'expire': time.time() + 3600,
