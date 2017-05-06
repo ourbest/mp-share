@@ -38,6 +38,7 @@ def login(request):
             return render(request, 'login.html', {'form': form})
 
 
+@login_required
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect('/pages')
@@ -116,6 +117,7 @@ def pages(request):
     return render(request, 'list.html', {'urls': db})
 
 
+@login_required
 def share_page(request, page):
     share_url = get_share_url(page, request)
 
@@ -140,6 +142,7 @@ def get_share_url(page, request):
     return share_url
 
 
+@login_required
 def add_share(request):
     page = utils.get_param(request, 'id')
     share_url = get_share_url(page, request)

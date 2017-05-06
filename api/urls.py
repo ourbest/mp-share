@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^share/(?P<page>.+)$', views.share_page),
     url(r'^auth$', views.wx_auth),
     url(r'^login$', views.login),
+    url(r'^logout$', views.logout),
     url(r'^add_share$', views.add_share),
 ]
