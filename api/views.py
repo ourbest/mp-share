@@ -147,7 +147,8 @@ def get_share_url(page, request):
 @login_required
 def add_share(request):
     page = utils.get_param(request, 'id')
-    share_url = get_share_url(page, request)
+    share_url = WxShareURL.objects.filter(id=page).select_related('wx_url').first()
+    # share_url = get_share_url(page, request)
     target = utils.get_param(request, 'target')
     if target:
         share_url.friend_shares = share_url.friend_shares + 1
