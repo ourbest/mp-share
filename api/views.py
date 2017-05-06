@@ -5,12 +5,42 @@ import uuid
 
 import requests
 from django.conf import settings
+from django.contrib import auth
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, render_to_response
+from django.template import RequestContext
 
 from api import utils
 from api.models import WxShareURL, WxClick, WxURL, WxUser
+
+from django.contrib.auth.decorators import login_required
+
+from .forms import LoginForm
+
+
+def login(request):
+    if request.method == 'GET':
+        form = LoginForm()
+        return render(request, 'login.html', {'form': form})
+    else:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = request.POST.get('username', '')
+            password = request.POST.get('password', '')
+            user = auth.authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect('/pages')
+            else:
+                return render(request, 'login.html', {'form': form, 'password_is_wrong': True})
+        else:
+            return render(request, 'login.html', {'form': form})
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/pages')
 
 
 def redirect(request, page):
@@ -34,7 +64,7 @@ def redirect(request, page):
         return HttpResponse(404)
 
 
-def auth(request):
+def wx_auth(request):
     code = utils.get_param(request, 'code')
     user_token_response = get_user_token(code)
     token = user_token_response.get('access_token')
@@ -57,13 +87,20 @@ def auth(request):
     return HttpResponseRedirect('/pages')
 
 
+@login_required
 def pages(request):
     wx_id = utils.get_user(request)
-    if wx_id == 1:
-        return HttpResponseRedirect('https://open.weixin.qq.com/connect/oauth2/authorize?'
-                                    'appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo'
-                                    '&state=STATE#wechat_redirect' % (settings.WX_APP_KEY,
-                                                                      'http%3A%2F%2Fwx.creditdev.com%2Fauth'))
+    # if wx_id == 1:
+    #     return HttpResponseRedirect('https://open.weixin.qq.com/connect/oauth2/authorize?'
+    #                                 'appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo'
+    #                                 '&state=STATE#wechat_redirect' % (settings.WX_APP_KEY,
+    #                                                                   'http%3A%2F%2Fwx.creditdev.com%2Fauth'))
+
+    u = WxUser.objects.filter(wx_id=wx_id).first()
+    if not u:
+        u = WxUser(wx_id=wx_id, sex=0, admin=0)
+        u.name = request.user.username
+        u.save()
 
     db = WxURL.objects.order_by('-pk').all()[0:20]
     # return JsonResponse({
@@ -87,7 +124,7 @@ def share_page(request, page):
     sig = sign('http://wx.creditdev.com/share/%s' % page, int(ts), nonce)
 
     return render(request, 'share.html', {'url': share_url, 'wx': {
-        'app': '1234',
+        'app': settings.WX_APP_KEY,
         'time': int(ts),
         'nonce': nonce,
         'sig': sig
@@ -106,6 +143,13 @@ def get_share_url(page, request):
 def add_share(request):
     page = utils.get_param(request, 'id')
     share_url = get_share_url(page, request)
+    target = utils.get_param(request, 'target')
+    if target:
+        share_url.friend_shares = share_url.friend_shares + 1
+    else:
+        share_url.timeline_shares = share_url.timeline_shares + 1
+    share_url.save()
+    return JsonResponse({'result': 0})
 
 
 def sign(url, ts, nonce):
@@ -135,14 +179,15 @@ def get_user_info(token, uid):
 
 def get_ticket():
     global tickets
-    token = get_token()
-    if tickets and tickets['expire'] > time.time():
+    if not tickets or tickets['expire'] < time.time():
+        token = get_token()
         response = requests.get('https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi' % token)
         ticket = response.json().get('ticket')
         tickets = {
             'expire': time.time() + 3600,
             'value': ticket
         }
+        return ticket
     else:
         return tickets['value']
 

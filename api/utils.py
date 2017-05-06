@@ -16,9 +16,13 @@ def get_param(request, name):
 
 
 def get_user(request):
-    id = request.session.get('wx_id')
-    request.session['wx_id'] = 1
-    return id if id else 1
+    if not hasattr(request, 'user'):
+        return None
+
+    return request.user.id
+    # id = request.session.get('wx_id')
+    # request.session['wx_id'] = 1
+    # return id if id else 1
 
 
 def set_user(request, id):

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load bootstrap3 %}
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <title>登录</title>
+    <meta name="description" content="">
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+        }
+
+        .well {
+            width: 300px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="well">
+    {% if password_is_wrong %}
+        <div class="alert alert-error">
+            <h4>错误!</h4>用户名或密码错误
+        </div>
+    {% endif %}
+    <h1>分享系统</h1>
+    <p></p>
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <p class="form-actions">
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                    {% bootstrap_icon "star" %} Submit
+                </button>
+            {% endbuttons %}
+        </p>
+    </form>
+</div>
+
+</body>
+</html>
