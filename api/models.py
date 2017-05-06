@@ -22,6 +22,7 @@ class WxURL(models.Model):
     created_at = models.DateTimeField('创建时间', auto_now_add=True)
     title = models.CharField('标题', max_length=100)
     image = models.CharField('图片', max_length=255, null=True)
+    memo = models.CharField('分享文案', max_length=255, default='')
 
     def __str__(self):
         return '%s - %s' % (self.title, self.url)
