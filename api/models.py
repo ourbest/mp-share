@@ -56,7 +56,7 @@ class WxClick(models.Model):
     uuid = models.CharField('用户唯一ID', max_length=64, default='')
 
     def __str__(self):
-        return '%s - %s - %s' % (self.wx_share_url.wx_url.url, self.ip, self.created_at.strftime('%Y-%m-%d %H:%M'))
+        return '%s - %s - %s' % (self.wx_share_url.wx_url.title, self.ip, self.created_at.strftime('%Y-%m-%d %H:%M'))
 
     class Meta:
         verbose_name = '点击记录'
