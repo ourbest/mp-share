@@ -6,3 +6,4 @@ pytz
 gunicorn
 django-bootstrap3
 django-flat-responsive
+django-modeladmin-reorder

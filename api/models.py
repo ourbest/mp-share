@@ -29,12 +29,12 @@ class WxURL(models.Model):
 
     class Meta:
         verbose_name = '文章'
-        verbose_name_plural = '文章列表'
+        verbose_name_plural = ' 文章列表'
 
 
 class WxShareURL(models.Model):
-    wx_url = models.ForeignKey(WxURL)
-    wx_user = models.ForeignKey(WxUser)
+    wx_url = models.ForeignKey(WxURL, verbose_name='文章')
+    wx_user = models.ForeignKey(WxUser, verbose_name='用户')
     created_at = models.DateTimeField('创建时间', auto_now_add=True)
     clicks = models.IntegerField('点击数', default=0)
     friend_shares = models.IntegerField('好友、群分享数', default=0)
@@ -49,14 +49,15 @@ class WxShareURL(models.Model):
 
 
 class WxClick(models.Model):
-    wx_share_url = models.ForeignKey(WxShareURL)
+    wx_share_url = models.ForeignKey(WxShareURL, verbose_name='分享的文章')
     created_at = models.DateTimeField('创建时间', auto_now_add=True)
     ip = models.CharField('IP', max_length=20)
     ua = models.CharField('客户端', max_length=255)
     uuid = models.CharField('用户唯一ID', max_length=64, default='')
 
     def __str__(self):
-        return '%s - %s - %s - %s' % (self.wx_share_url.wx_url.title, self.uuid, self.ip, self.created_at.strftime('%Y-%m-%d %H:%M'))
+        return '%s - %s - %s - %s' % (
+            self.wx_share_url.wx_url.title, self.uuid, self.ip, self.created_at.strftime('%Y-%m-%d %H:%M'))
 
     class Meta:
         verbose_name = '点击记录'

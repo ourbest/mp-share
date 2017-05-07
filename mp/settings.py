@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # 'suit',
     'flat_responsive',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'bootstrap3',
+    'admin_reorder',
 ]
 
 MIDDLEWARE = [
@@ -48,8 +50,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
+ADMIN_REORDER = (
+    # Reorder app models
+    {'app': 'api', 'label': '站点管理'},
+
+    # Rename app
+    {'app': 'auth', 'label': '用户管理'},
+)
 ROOT_URLCONF = 'mp.urls'
 
 TEMPLATES = [
@@ -185,7 +195,7 @@ BOOTSTRAP3 = {
 
 LOGIN_URL = '/login'
 
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 90 # One month
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 90  # One month
 
 try:
     from .local_settings import *

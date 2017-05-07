@@ -127,12 +127,16 @@ def share_page(request, page):
     nonce = str(ts)[-6:]
     sig = sign('http://wx.creditdev.com/share/%s' % page, int(ts), nonce)
 
-    return render(request, 'share.html', {'url': share_url, 'wx': {
-        'app': settings.WX_APP_KEY,
-        'time': int(ts),
-        'nonce': nonce,
-        'sig': sig
-    }})
+    uv = WxClick.objects.filter(wx_share_url=share_url).values_list('uuid', flat=True).distinct().count()
+
+    return render(request, 'share.html', {'url': share_url,
+                                          'uv': uv,
+                                          'wx': {
+                                              'app': settings.WX_APP_KEY,
+                                              'time': int(ts),
+                                              'nonce': nonce,
+                                              'sig': sig
+                                          }})
 
 
 def get_share_url(page, request):
