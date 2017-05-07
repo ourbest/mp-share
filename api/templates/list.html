@@ -42,7 +42,7 @@
 <div class="container">
     <ol>
         {% for url in urls %}
-        <li>
+        <li onclick="window.location='share/{{ url.id }}'; return false;">
             <img src="{% autoescape off %}{{ url.image }}{% endautoescape %}" class="img">
             <div class="article">
                 <div><a href="share/{{ url.id }}">{{ url.title }}</a></div>
