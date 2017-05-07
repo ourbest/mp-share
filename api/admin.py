@@ -22,8 +22,13 @@ class WxURLAdmin(admin.ModelAdmin):
 
 @admin.register(WxShareURL)
 class WxShareURLAdmin(admin.ModelAdmin):
-    list_display = ('wx_url', 'wx_user', 'created_at', 'clicks', '_get_uv', 'friend_shares', 'timeline_shares')
+    list_display = ('wx_user', '_get_title', 'created_at', 'clicks', '_get_uv', 'friend_shares', 'timeline_shares')
     ordering = ('-id',)
+
+    def _get_title(self, obj):
+        return format_html('<a href="{url}" width="80" target="_blank">{title}</a>', url=obj.wx_url.url, title=obj.wx_url.title)
+
+    _get_title.short_description = '文章标题'
 
     def _get_uv(self, obj):
         return WxClick.objects.filter(wx_share_url=obj).values_list('uuid', flat=True).distinct().count()
